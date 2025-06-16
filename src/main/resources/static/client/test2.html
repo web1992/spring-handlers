@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><title>SSE Proxy Test</title></head>
+<body>
+<h1>SSE Proxy Output:</h1>
+<div id="output"></div>
+
+<script>
+    const output = document.getElementById("output");
+    const eventSource = new EventSource("/sse-proxy");
+
+    eventSource.onmessage = function (event) {
+      const div = document.createElement("div");
+      div.textContent = event.data;
+      output.appendChild(div);
+    };
+</script>
+</body>
+</html>
