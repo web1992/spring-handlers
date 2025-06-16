@@ -8,6 +8,7 @@ public class SpringHandlersApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringHandlersApplication.class, args);
+        System.out.println("http://localhost:8082/hello");
     }
 
 }
