@@ -28,7 +28,7 @@ public class SseClientExample {
     public static void main(String[] args) throws InterruptedException {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)  // 连接超时
-                .readTimeout(30, TimeUnit.SECONDS)     // 读取超时
+                .readTimeout(60000, TimeUnit.SECONDS)     // 读取超时
                 .writeTimeout(15, TimeUnit.SECONDS)    // 写入超时
                 .callTimeout(60000, TimeUnit.SECONDS)     // 整体调用超时（可选）
                 .build();

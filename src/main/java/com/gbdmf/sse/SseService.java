@@ -34,6 +34,7 @@ public class SseService {
         if (emitter != null) {
             try {
                 emitter.send(SseEmitter.event().name("message").data(message));
+                //emitter.complete();
                 return "消息已发送";
             } catch (IOException e) {
                 clients.remove(clientId);
