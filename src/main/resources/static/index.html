@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SSE Client</title>
+</head>
+<body>
+<h1>SSE 客户端</h1>
+<div id="messages"></div>
+
+<script>
+    const clientId = "user123";
+    const eventSource = new EventSource("http://127.0.0.1:8081/sse/connect/" + clientId);
+
+    eventSource.onmessage = function (event) {
+        const div = document.getElementById("messages");
+        div.innerHTML += "<p>Message: " + event.data + "</p>";
+    };
+
+    eventSource.addEventListener("INIT", function(event) {
+        console.log("连接初始化：" + event.data);
+    });
+
+    eventSource.onerror = function (err) {
+        console.error("SSE 连接错误", err);
+        eventSource.close();
+    };
+</script>
+</body>
+</html>

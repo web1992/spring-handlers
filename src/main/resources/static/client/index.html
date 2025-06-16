@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SSE 客户端</title>
+</head>
+<body>
+<h1>SSE 实时消息客户端</h1>
+
+<!-- 消息输入区域 -->
+<label for="messageInput">输入消息：</label>
+<input type="text" id="messageInput" placeholder="输入要发送的内容" />
+<button onclick="sendMessage()">发送消息</button>
+
+<hr />
+
+<!-- 消息显示区域 -->
+<div id="messages">
+    <h2>接收到的消息：</h2>
+</div>
+
+<script>
+    const clientId = "user123"; // 可动态设置
+    const serverUrl = "http://localhost:8081"; // Spring Boot 端口
+
+    // 建立 SSE 连接
+    const eventSource = new EventSource(`${serverUrl}/sse/connect/${clientId}`);
+
+    eventSource.onmessage = function (event) {
+      appendMessage("通用消息", event.data);
+    };
+
+    eventSource.addEventListener("INIT", function (event) {
+      appendMessage("系统", event.data);
+    });
+
+    eventSource.onerror = function (err) {
+      appendMessage("错误", "连接发生错误，已关闭。");
+      eventSource.close();
+    };
+
+    // 点击按钮发送消息
+    function sendMessage() {
+      const input = document.getElementById("messageInput");
+      const message = input.value.trim();
+      if (!message) return alert("请输入消息内容");
+
+      fetch(`${serverUrl}/sse/send/${clientId}`, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: message
+      })
+        .then(response => response.text())
+        .then(result => {
+          appendMessage("发送", "消息发送结果：" + result);
+          input.value = "";
+        })
+        .catch(err => {
+          appendMessage("错误", "发送失败：" + err.message);
+        });
+    }
+
+    // 添加一条消息到页面上
+    function appendMessage(type, content) {
+      const messagesDiv = document.getElementById("messages");
+      const p = document.createElement("p");
+      p.innerHTML = `<strong>[${type}]</strong> ${content}`;
+      messagesDiv.appendChild(p);
+    }
+</script>
+</body>
+</html>
