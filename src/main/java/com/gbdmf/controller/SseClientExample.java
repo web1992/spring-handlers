@@ -4,12 +4,13 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSON;
-import okhttp3.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 import okhttp3.sse.EventSources;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,12 @@ public class SseClientExample {
 
 
     public static void main(String[] args) throws InterruptedException {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)  // 连接超时
+                .readTimeout(30, TimeUnit.SECONDS)     // 读取超时
+                .writeTimeout(15, TimeUnit.SECONDS)    // 写入超时
+                .callTimeout(60000, TimeUnit.SECONDS)     // 整体调用超时（可选）
+                .build();
 
         Request request = new Request.Builder()
                 .url(UPSTREAM_SSE_URL)  // 替换为你的 SSE 地址
