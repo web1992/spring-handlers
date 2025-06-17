@@ -25,6 +25,7 @@ public class SseClientExample {
     static String sendUrl = "https://testgateway.pangmaoq.com/safeapi/inner/aiAssistant/sendAiChatMsg";
 
 
+    // 使用 EventSourceListener + okhttp3 进行 sse 接口的例子
     public static void main(String[] args) throws InterruptedException {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)  // 连接超时
@@ -35,7 +36,7 @@ public class SseClientExample {
 
         Request request = new Request.Builder()
                 .url(UPSTREAM_SSE_URL)  // 替换为你的 SSE 地址
-                .header("Accept", "text/event-stream")
+//                .header("Accept", "text/event-stream")
                 .build();
 
         EventSourceListener listener = new EventSourceListener() {
@@ -73,7 +74,7 @@ public class SseClientExample {
 
         // contents 列表
         Map<String, Object> contentItem = new HashMap<>();
-        contentItem.put("content", "hello\n");
+        contentItem.put("content", "hello");
         contentItem.put("contentType", "text");
 
         List<Map<String, Object>> contents = new ArrayList<>();
